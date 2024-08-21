@@ -27,6 +27,9 @@ class Artist
     #[ORM\OneToMany(targetEntity: Disc::class, mappedBy: 'artist')]
     private Collection $discs;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Url = null;
+
     public function __construct()
     {
         $this->discs = new ArrayCollection();
@@ -87,6 +90,18 @@ class Artist
                 $disc->setArtist(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->Url;
+    }
+
+    public function setUrl(?string $Url): static
+    {
+        $this->Url = $Url;
 
         return $this;
     }
