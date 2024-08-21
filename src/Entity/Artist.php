@@ -19,16 +19,13 @@ class Artist
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $firstName = null;
+    private ?string $url = null;
 
     /**
      * @var Collection<int, Disc>
      */
     #[ORM\OneToMany(targetEntity: Disc::class, mappedBy: 'artist')]
     private Collection $discs;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Url = null;
 
     public function __construct()
     {
@@ -52,14 +49,14 @@ class Artist
         return $this;
     }
 
-    public function getFirstName(): ?string
+    public function getUrl(): ?string
     {
-        return $this->firstName;
+        return $this->url;
     }
 
-    public function setFirstName(string $firstName): static
+    public function setUrl(string $url): static
     {
-        $this->firstName = $firstName;
+        $this->url = $url;
 
         return $this;
     }
@@ -90,18 +87,6 @@ class Artist
                 $disc->setArtist(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->Url;
-    }
-
-    public function setUrl(?string $Url): static
-    {
-        $this->Url = $Url;
 
         return $this;
     }
