@@ -25,7 +25,7 @@ class ContactFormType extends AbstractType
             ]
         )
             ->add('save', SubmitType::class, [ /*besoin de use Symfony\Component\Form\Extension\Core\Type\SubmitType;*/
-                'label' => 'Envoyer le message'])
+                'label' => 'Envoyer votre message'])
         ;
     }
 
