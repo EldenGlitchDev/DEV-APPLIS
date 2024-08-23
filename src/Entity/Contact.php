@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ContactRepository;
+use App\Validator\BanWord;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+/*use Symfony\Component\Validator\Constraints as Assert;*/ // Le 'as Assert' (tout comme le 'as ORM' sur la ligne du dessus est un Alias pouvant être rappelé ensuite)
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
@@ -21,6 +23,8 @@ class Contact
     private ?string $email = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    /*#[Assert\Length(min:10, max:500)] Autre méthode de validation pour les messages, en utilisant 'use Symfony\Component\Validator\Constraints as Assert;'*/
+    #[BanWord()]
     private ?string $message = null;
 
     public function getId(): ?int
