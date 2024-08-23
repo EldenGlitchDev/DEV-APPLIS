@@ -22,7 +22,7 @@ class ContactController extends AbstractController
                 //on crée une instance de Contact
                 $message = new Contact();
                 // Traitement des données du formulaire
-                $data = $form->getData();
+                $data = $form->getData(); /* En spécifiant null comme valeur de data_class (dans ContactFormType.php), vous pouvez traiter les données du formulaire directement à partir du tableau renvoyé par la méthode getData() du formulaire. */
                 //on stocke les données récupérées dans la variable $message
                 $message = $data;
 

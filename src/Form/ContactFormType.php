@@ -36,3 +36,10 @@ class ContactFormType extends AbstractType
         ]);
     }
 }
+
+/*public function configureOptions(OptionsResolver $resolver):void      (dans le cas où le formulaire n'est associé à aucune entité)
+{
+    $resolver->setDefaults([
+        'data_class' => null,
+    ]);
+}*/
