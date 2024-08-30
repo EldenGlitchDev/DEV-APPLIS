@@ -9,11 +9,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Controller\MailerController;
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, MailerController $mailerController): Response
     {
         $form = $this->createForm(ContactFormType::class);
         $form->handleRequest($request); /* nous utilisons la méthode handleRequest() pour traiter la requête HTTP actuelle et valider les données soumises. */
@@ -26,18 +27,29 @@ class ContactController extends AbstractController
                 //on stocke les données récupérées dans la variable $message
                 $message = $data;
 
+
+                // ajout mail ici
+               /* $recipient = $data['email'];*/
+
+
                 $entityManager->persist($message); /* persist qui permet de spécifier à doctrine qu'une nouvelle entité doit être persisté. */
                 $entityManager->flush(); /* flush qui indique à doctrine de générer le code sql pour mettre à jour votre base. */
+
+
+                // Mail à partir d'ici
+               /* $mailerController->sendEmail($message, $recipient);*/
+
 
                 return $this->redirectToRoute('app_accueil');
             }
 
         return $this->render('contact/index.html.twig', [
-            'form' => $form->createView(), /* méthode createView() pour générer une représentation du formulaire prête à être affichée dans notre template. */
+            //'form' => $form->createView(), /*jusqu'à 6.2 méthode createView() pour générer une représentation du formulaire prête à être affichée dans notre template. */
             'form' => $form
         ]);
     }
 }
+
 
 /* Exemple service en Symfony */
 
