@@ -1,12 +1,13 @@
 <?php
 
-/*namespace App\Controller;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class MailerController extends AbstractController
 {
@@ -24,25 +25,30 @@ class MailerController extends AbstractController
             ->text('Sending emails is fun again ! (NOOOOO !!!!!)')
             ->html('<p>See Twig integration for more examples</p>');
 
-        $mailer->send($email);
+            try {
+                $mailer->send($email);
+            } catch (TransportExceptionInterface $e) {
+                // some error prevented the email sending; display an
+                // error message or try to resend the message
+            }
 
         return $this->render('mailer/index.html.twig', [
             'controller_name' => 'MailerController',
         ]);
     }
-}*/
+}
 
 
 /* METHODE AVEC TWIG BUNDLE */
 
-namespace App\Controller;
+/*namespace App\Controller;
 
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-/*use Symfony\Component\Mime\Email;*/
+/*use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\File;
@@ -93,4 +99,4 @@ class MailerController extends AbstractController
             'email' => $email
         ]);
     }
-}
+}*/

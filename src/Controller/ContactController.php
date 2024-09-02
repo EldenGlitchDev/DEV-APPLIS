@@ -9,35 +9,59 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Controller\MailerController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(Request $request, EntityManagerInterface $entityManager, MailerController $mailerController): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
-        $form = $this->createForm(ContactFormType::class);
+
+        $contact = new Contact();
+
+        /*if ($this->getUser()){
+            $contact->setFullName($this->getUser()->getFullName())
+            ->setEmail($this->getUser()->getEmail());
+        }*/
+
+        $form = $this->createForm(ContactFormType::class, $contact);
+        
         $form->handleRequest($request); /* nous utilisons la méthode handleRequest() pour traiter la requête HTTP actuelle et valider les données soumises. */
 
             if($form->isSubmitted() && $form->isValid()){ /* "if ($form->isSubmitted()" si le formulaire est soumis ET "&& $form->isValid())" si le formulaire est valide, nous pouvons accéder aux données du formulaire à l'aide de la méthode getData().*/
                 //on crée une instance de Contact
-                $message = new Contact();
+                //$message = new Contact();
                 // Traitement des données du formulaire
-                $data = $form->getData(); /* En spécifiant null comme valeur de data_class (dans ContactFormType.php), vous pouvez traiter les données du formulaire directement à partir du tableau renvoyé par la méthode getData() du formulaire. */
+                $contact = $form->getData(); /* En spécifiant null comme valeur de data_class (dans ContactFormType.php), vous pouvez traiter les données du formulaire directement à partir du tableau renvoyé par la méthode getData() du formulaire. */
                 //on stocke les données récupérées dans la variable $message
-                $message = $data;
+                //$message = $data;
 
 
-                // ajout mail ici
-               /* $recipient = $data['email'];*/
 
-
-                $entityManager->persist($message); /* persist qui permet de spécifier à doctrine qu'une nouvelle entité doit être persisté. */
+                $entityManager->persist($contact); /* persist qui permet de spécifier à doctrine qu'une nouvelle entité doit être persisté. */
                 $entityManager->flush(); /* flush qui indique à doctrine de générer le code sql pour mettre à jour votre base. */
 
 
                 // Mail à partir d'ici
-               /* $mailerController->sendEmail($message, $recipient);*/
+                $email = (new Email())
+                ->from('hello@example.com')
+                ->to('you@example.com')
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                //->priority(Email::PRIORITY_HIGH)
+                ->subject('Time for Symfony Mailer !')
+                ->text('Sending emails is fun again ! (NOOOOO !!!!!)')
+                ->html('<p>See Twig integration for more examples</p>');
+    
+                try {
+                    $mailer->send($email);
+                } catch (TransportExceptionInterface $e) {
+                    // some error prevented the email sending; display an
+                    // error message or try to resend the message
+                }
 
 
                 return $this->redirectToRoute('app_accueil');
