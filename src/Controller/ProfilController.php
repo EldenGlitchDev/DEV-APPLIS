@@ -16,15 +16,20 @@ class ProfilController extends AbstractController
     }
 
     #[Route('/profil', name: 'app_profil')]
-    public function index(): Response
-    {
-        $identifiant = $this->getUser()->getUserIdentifier();
-        if($identifiant){
-            $info = $this->userRepo->findOneBy(["email" => $identifiant]);
-        }
-
-        return $this->render('profil/index.html.twig', [
-            'informations' => $info
-        ]);
+public function index(): Response
+{
+    $user = $this->getUser();
+    if ($user) {
+        $identifiant = $user->getUserIdentifier();
+        $info = $this->userRepo->findOneBy(["email" => $identifiant]);
+    } else {
+        // Handle the case where the user is not authenticated
+        // For example, you could redirect them to the login page
+        return $this->redirectToRoute('app_login');
     }
+
+    return $this->render('profil/index.html.twig', [
+        'informations' => $info
+    ]);
+}
 }
